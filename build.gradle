@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.10.2'
+    lombokVersion = '1.18.30'
+    springVersion = '5.3.37'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    // Spring
+    implementation ("org.springframework:spring-context:${springVersion}")
+            { exclude group: 'commons-logging', module: 'commons-logging' }
+    implementation "org.springframework:spring-webmvc:${springVersion}"
+    implementation 'javax.inject:javax.inject:1'
+
+    // Servlet
+    compileOnly('javax.servlet:javax.servlet-api:4.0.1')
+    compileOnly('javax.servlet.jsp:jsp-api:2.1')
+    implementation('javax.servlet:jstl:1.2')
+
+    // Test
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    // Logging
+    implementation('org.slf4j:slf4j-api:2.0.9')
+    runtimeOnly('org.slf4j:jcl-over-slf4j:2.0.9')
+    runtimeOnly('org.slf4j:slf4j-log4j12:2.0.9')
+    implementation('log4j:log4j:1.2.17')
+
+    // Lombok
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+}
+
+test {
+    useJUnitPlatform()
+}
