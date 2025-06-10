@@ -48,6 +48,9 @@ dependencies {
     // Lombok
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+    // JDBC Driver (MySQL)
+    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 }
 
 test {

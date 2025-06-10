@@ -1,4 +1,4 @@
-package org.example.kb6spring.common.config;
+package org.example.kb6spring.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

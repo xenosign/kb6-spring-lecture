@@ -1,13 +1,12 @@
-package org.example.kb6spring.member.controller;
+package org.example.kb6spring.controller.member;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @Slf4j
-public class MemberController {
+public class MemberHomeController {
     @GetMapping("/member")
     public String memberHome() {
         log.info("========> '/member', member/index.jsp");
