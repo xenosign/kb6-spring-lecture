@@ -32,4 +32,17 @@ public class MemberServiceV1 {
 
         return dtoList;
     }
+
+    public void addMember(String name, String email) {
+        MemberEntity member = new MemberEntity();
+
+        member.setName(name);
+        member.setEmail(email);
+        
+        member.setGrade("아이언");
+        member.setAsset(100L);
+
+        memberRepository.save(member);
+    }
+
 }
