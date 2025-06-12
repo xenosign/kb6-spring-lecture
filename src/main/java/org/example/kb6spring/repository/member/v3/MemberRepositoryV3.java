@@ -20,5 +20,9 @@ public class MemberRepositoryV3 {
         return memberMapper.findAll();
     }
 
-    public void save(MemberEntity member) {}
+    public void save(MemberEntity member) {};
+
+    public List<MemberEntity> findTwo() {
+        return memberMapper.findTwo();
+    }
 }

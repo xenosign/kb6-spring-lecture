@@ -45,4 +45,18 @@ public class MemberServiceV1 {
 
         memberRepository.save(member);
     }
+
+    public List<MemberDto> findTwo() {
+        List<MemberEntity> entityList = memberRepository.findTwo();
+        List<MemberDto> dtoList = new ArrayList<>();
+
+        for (MemberEntity entity : entityList) {
+            MemberDto dto = new MemberDto();
+            dto.setEmail(entity.getEmail());
+            dto.setName(entity.getName());
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+    }
 }

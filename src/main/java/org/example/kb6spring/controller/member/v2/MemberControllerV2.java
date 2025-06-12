@@ -48,4 +48,11 @@ public class MemberControllerV2 {
     public String addMemberPage() {
         return "member/v2/add";
     }
+
+    @GetMapping("/list2")
+    public String findTwo(Model model) {
+        List<MemberDto> memberList = memberService.findTwo();
+        model.addAttribute("memberList", memberList);
+        return "member/v2/list";
+    }
 }
