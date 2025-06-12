@@ -24,10 +24,10 @@ public class JDBCTest {
     @DisplayName("JDBC 드라이버 연결이 된다.")
     public void testConnection() {
         String url = "jdbc:mysql://localhost:3306/tetzdb";
-        try (Connection con = DriverManager.getConnection(url,"root","1234")) {
+        try (Connection con = DriverManager.getConnection(url, "root", "1234")) {
             log.info("con = {}", con);
-        }catch(Exception e) {
-                fail(e.getMessage());
- }
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
     }
 }
