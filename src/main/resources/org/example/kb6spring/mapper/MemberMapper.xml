@@ -7,7 +7,7 @@
         select *
         from member;
     </select>
-    <select id="findOne" resultType="MemberEntity">
+    <select id="findTwo" resultType="MemberEntity">
         select *
         from member
         LIMIT 2;
