@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -17,6 +18,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource({"classpath:/application.properties"})
+@MapperScan(basePackages = {"org.example.kb6spring.mapper"})
 @ComponentScan(basePackages = {"org.example.kb6spring"})
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
@@ -27,10 +29,10 @@ public class RootConfig {
     @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName(driver);
-        config.setJdbcUrl(url);
-        config.setUsername(username);
-        config.setPassword(password);
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        config.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/tetzdb");
+        config.setUsername("root");
+        config.setPassword("1234");
         HikariDataSource dataSource = new HikariDataSource(config);
         return dataSource;
     }

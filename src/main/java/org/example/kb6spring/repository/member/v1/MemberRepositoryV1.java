@@ -1,4 +1,4 @@
-package org.example.kb6spring.repository.member;
+package org.example.kb6spring.repository.member.v1;
 
 import org.example.kb6spring.domain.member.MemberEntity;
 import org.springframework.stereotype.Repository;

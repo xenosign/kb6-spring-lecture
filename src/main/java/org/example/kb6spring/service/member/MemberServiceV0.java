@@ -2,8 +2,7 @@ package org.example.kb6spring.service.member;
 
 import org.example.kb6spring.domain.member.MemberEntity;
 import org.example.kb6spring.dto.member.MemberDto;
-import org.example.kb6spring.repository.member.MemberRepositoryV0;
-import org.example.kb6spring.repository.member.MemberRepositoryV1;
+import org.example.kb6spring.repository.member.v1.MemberRepositoryV0;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
