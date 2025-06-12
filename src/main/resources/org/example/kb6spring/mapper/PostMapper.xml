@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.kb6spring.mapper.PostMapper">
+    <select id="findAll" resultType="PostDto">
+        SELECT * FROM posts;
+    </select>
+
+    <delete id="delete">
+        DELETE FROM posts
+        WHERE id=#{id};
+    </delete>
+
+<!--    <insert id="save" useGeneratedKeys="true" keyProperty="id">-->
+    <insert id="save">
+        insert into posts (title, content)
+        values (#{title}, #{content});
+    </insert>
+
+    <select id="findByCond" resultType="PostDto">
+        SELECT id, title, content
+        FROM posts
+        <where>
+            <if test="title != null and title != ''">
+                AND title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="content != null and content != ''">
+                AND content LIKE CONCAT('%', #{content}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>
