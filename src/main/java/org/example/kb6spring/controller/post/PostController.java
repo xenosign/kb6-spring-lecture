@@ -60,7 +60,7 @@ public class PostController {
             HttpServletRequest request,
             Model model
     ) {
-        log.info("================> 게시글 검색 기능 호출, " + request.getRequestURI());
+        log.info("================> 게시글 검색 기능 호출, " + "/post/v1/search");
 
         model.addAttribute("postList", postService.findByCond(title, content));
         return "post/list";
@@ -68,7 +68,9 @@ public class PostController {
 
     @GetMapping("/compare")
     public String compare(Model model) {
-        int count = 10000;
+        log.info("================> DB 비교 기능 호출, " + "/post/v1/compare");
+        
+        int count = 1000;
         postService.resetAndGeneratePosts(count);
 
         long mysqlTime = postService.testMysqlReadTime(count);
