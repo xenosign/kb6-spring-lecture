@@ -2,14 +2,12 @@ package org.example.kb6spring.controller.post;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.kb6spring.dto.post.PostDto;
 import org.example.kb6spring.service.post.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -66,5 +64,20 @@ public class PostController {
 
         model.addAttribute("postList", postService.findByCond(title, content));
         return "post/list";
+    }
+
+    @GetMapping("/compare")
+    public String compare(Model model) {
+        int count = 10000;
+        postService.resetAndGeneratePosts(count);
+
+        long mysqlTime = postService.testMysqlReadTime(count);
+        long redisTime = postService.testRedisReadTime(count);
+
+        model.addAttribute("count", count);
+        model.addAttribute("mysqlTime", mysqlTime);
+        model.addAttribute("redisTime", redisTime);
+
+        return "post/compare";
     }
 }

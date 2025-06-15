@@ -27,4 +27,31 @@ public class PostService {
     public List<PostDto> findByCond(String title, String content) {
         return postRepository.findByCond(title, content);
     }
+
+    // DB Compare
+    public void resetAndGeneratePosts(int count) {
+        postRepository.clearAll();
+
+        for (int i = 1; i <= count; i++) {
+            String title = "제목 " + i;
+            String content = "내용 " + i;
+            postRepository.save(title, content);
+        }
+    }
+
+    public long testMysqlReadTime(int count) {
+        long start = System.currentTimeMillis();
+        for (int i = 1; i <= count; i++) {
+            postRepository.findById(i);
+        }
+        return System.currentTimeMillis() - start;
+    }
+
+    public long testRedisReadTime(int count) {
+        long start = System.currentTimeMillis();
+        for (int i = 1; i <= count; i++) {
+            postRepository.findByIdFromRedis(i);
+        }
+        return System.currentTimeMillis() - start;
+    }
 }

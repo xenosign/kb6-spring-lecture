@@ -30,4 +30,19 @@
             </if>
         </where>
     </select>
+
+    <select id="findById" resultType="PostDto">
+        SELECT id, title, content
+        FROM posts
+        WHERE id = #{id}
+    </select>
+
+    <insert id="saveForTest" useGeneratedKeys="true" keyProperty="id">
+        insert into posts2 (title, content)
+        values (#{title}, #{content});
+    </insert>
+
+    <delete id="deleteAll">
+        DELETE FROM posts2
+    </delete>
 </mapper>
