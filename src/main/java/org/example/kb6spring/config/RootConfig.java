@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
@@ -28,7 +31,7 @@ public class RootConfig {
 
     @Value("com.mysql.cj.jdbc.Driver") String driver;
     @Value("jdbc:mysql://127.0.0.1:3306/tetzdb") String url;
-    @Value("$root") String username;
+    @Value("root") String username;
     @Value("1234") String password;
 
     @Bean
@@ -58,5 +61,21 @@ public class RootConfig {
     public DataSourceTransactionManager transactionManager(){
         DataSourceTransactionManager manager = new DataSourceTransactionManager(dataSource());
         return manager;
+    }
+
+    // Redis
+    @Value("${redis.host}") String redisHost;
+    @Value("${redis.port}") String redisPort;
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory("localhost", 6379); // 포트나 호스트는 환경에 따라 조정
+    }
+
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+        return template;
     }
 }
