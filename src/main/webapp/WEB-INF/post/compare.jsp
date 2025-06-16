@@ -6,7 +6,7 @@
     <title>DB Compare</title>
 </head>
 <body>
-<h1>Member List</h1>
+<h1>DB Comparison</h1>
 <h2>데이터 ${count}건 조회</h2>
 <h3>MySQL 속도 : ${mysqlTime} ms</h3>
 <h3>Redis 속도 : ${redisTime} ms</h3>

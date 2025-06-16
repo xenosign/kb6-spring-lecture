@@ -13,8 +13,7 @@ public interface PostMapper {
     int save(@Param("title") String title, @Param("content") String content);
     List<PostDto> findByCond(@Param("title") String title, @Param("content") String content);
 
-    PostDto findById(@Param("id") int id);
-    int saveForTest(@Param("title") String title, @Param("content") String content);
     void deleteAll();
-
+    int saveForTest(@Param("title") String title, @Param("content") String content);
+    PostDto findById(@Param("id") int id);
 }

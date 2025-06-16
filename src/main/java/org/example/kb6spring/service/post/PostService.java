@@ -15,23 +15,19 @@ public class PostService {
     public List<PostDto> findAll() {
         return postRepository.findAll();
     }
-
     public int delete(int id) {
         return postRepository.delete(id);
     }
-
     public void save(String title, String content) {
         postRepository.save(title, content);
     }
-
     public List<PostDto> findByCond(String title, String content) {
         return postRepository.findByCond(title, content);
     }
 
     // DB Compare
     public void resetAndGeneratePosts(int count) {
-        postRepository.clearAll();
-
+        postRepository.deleteAll();
         for (int i = 1; i <= count; i++) {
             String title = "제목 " + i;
             String content = "내용 " + i;

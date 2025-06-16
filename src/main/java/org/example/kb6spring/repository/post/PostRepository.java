@@ -33,7 +33,13 @@ public class PostRepository {
         return postMapper.findByCond(title, content);
     }
 
-    // Redis
+
+    public void deleteAll() {
+        postMapper.deleteAll();
+        // Redis 전체 삭제
+        redisTemplate.delete(redisTemplate.keys("post:*"));
+    }
+
     public PostDto findById(int id) {
         return postMapper.findById(id);
     }
@@ -44,14 +50,6 @@ public class PostRepository {
             return (PostDto) obj;
         }
         return null;
-    }
-
-    public void clearAll() {
-        // MySQL 전체 삭제
-        postMapper.deleteAll();
-
-        // Redis 전체 삭제
-        redisTemplate.delete(redisTemplate.keys("post:*"));
     }
 
     public void save(PostDto post) {
