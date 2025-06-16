@@ -30,6 +30,9 @@ dependencies {
     implementation "org.springframework:spring-webmvc:${springVersion}"
     implementation 'javax.inject:javax.inject:1'
 
+    // Serializable
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.5'
+
     // Servlet
     compileOnly('javax.servlet:javax.servlet-api:4.0.1')
     compileOnly('javax.servlet.jsp:jsp-api:2.1')

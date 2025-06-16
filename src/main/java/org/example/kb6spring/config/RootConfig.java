@@ -32,7 +32,7 @@ public class RootConfig {
     @Value("com.mysql.cj.jdbc.Driver") String driver;
     @Value("jdbc:mysql://127.0.0.1:3306/tetzdb") String url;
     @Value("root") String username;
-    @Value("") String password;
+    @Value("1234") String password;
 
     @Bean
     public DataSource dataSource() {
