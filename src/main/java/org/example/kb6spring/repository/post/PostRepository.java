@@ -53,7 +53,7 @@ public class PostRepository {
     }
 
     public void save(PostDto post) {
-        postMapper.saveForTest(post.getTitle(), post.getContent());
+        postMapper.saveForTest(post);
         redisTemplate.opsForValue().set("post:" + post.getId(), post);
     }
 }

@@ -31,7 +31,12 @@ public class PostService {
         for (int i = 1; i <= count; i++) {
             String title = "제목 " + i;
             String content = "내용 " + i;
-            postRepository.save(title, content);
+
+            PostDto postDto = new PostDto();
+            postDto.setTitle(title);
+            postDto.setContent(content);
+
+            postRepository.save(postDto);
         }
     }
 
