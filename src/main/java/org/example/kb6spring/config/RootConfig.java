@@ -63,19 +63,5 @@ public class RootConfig {
         return manager;
     }
 
-    // Redis
-    @Value("${redis.host}") String redisHost;
-    @Value("${redis.port}") String redisPort;
 
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory("localhost", 6379); // 포트나 호스트는 환경에 따라 조정
-    }
-
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(redisConnectionFactory());
-        return template;
-    }
 }
