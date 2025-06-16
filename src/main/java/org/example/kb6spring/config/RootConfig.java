@@ -32,15 +32,15 @@ public class RootConfig {
     @Value("com.mysql.cj.jdbc.Driver") String driver;
     @Value("jdbc:mysql://127.0.0.1:3306/tetzdb") String url;
     @Value("root") String username;
-    @Value("1234") String password;
+    @Value("") String password;
 
     @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        config.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/tetzdb");
-        config.setUsername("root");
-        config.setPassword("1234");
+        config.setDriverClassName(driver);
+        config.setJdbcUrl(url);
+        config.setUsername(username);
+        config.setPassword(password);
         HikariDataSource dataSource = new HikariDataSource(config);
         return dataSource;
     }
