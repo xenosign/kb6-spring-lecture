@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/post/v3")
