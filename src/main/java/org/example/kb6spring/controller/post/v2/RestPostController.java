@@ -45,7 +45,8 @@ public class RestPostController {
     }
 
     @PostMapping("/new")
-    public String addPost(@RequestParam("title") String title, @RequestParam("content") String content) {
+    public String addPost(@RequestParam("title") String title,
+                          @RequestParam("content") String content) {
         log.info("==========> 게시글 추가 기능 호출", "/post/v1/new");
 
         postService.save(title, content);

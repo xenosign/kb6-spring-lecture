@@ -64,12 +64,12 @@ public class RestPostControllerV3 {
     }
 
     @PostMapping("/new")
-    public String addPost(@RequestParam("title") String title, @RequestParam("content") String content) {
+    public ResponseEntity<String> addPost(@RequestBody PostDto postDto, HttpServletRequest request) {
         log.info("==========> 게시글 추가 기능 호출", "/post/v1/new");
 
-        postService.save(title, content);
+        log.info("postDto: {}", postDto);
 
-        return "redirect:/post/v1/list";
+        return ResponseEntity.ok("게시글 추가 요청");
     }
 
     // 게시글 검색
