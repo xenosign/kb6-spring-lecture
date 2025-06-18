@@ -1,5 +1,8 @@
 package org.example.kb6spring.controller.post.v3;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kb6spring.dto.post.PostDto;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@Api(tags = "게시판 REST 컨트롤러")
 @RestController
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -20,6 +24,7 @@ import java.util.List;
 public class RestPostControllerV3 {
     private final PostService postService;
 
+    @ApiOperation(value = "전체 게시글 조회", notes = "전체 게시글 조회 API")
     @GetMapping("/list")
     public ResponseEntity<List<PostDto>> list(HttpServletRequest request) {
         log.info("==========> 게시글 목록 데이터 호출, {}", request.getRequestURI());
@@ -40,7 +45,9 @@ public class RestPostControllerV3 {
     }
 
     @PostMapping(value = "/delete", produces="text/plain;charset=UTF-8")
-    public ResponseEntity<String> delete(@RequestParam("id") int id, HttpServletRequest request) {
+    public ResponseEntity<String> delete(
+            @ApiParam(value = "게시글 ID", required = true, example = "1")
+            @RequestParam("id") int id, HttpServletRequest request) {
         log.info("==========> 삭제 기능 호출, {}", request.getRequestURI());
 
         try {
@@ -64,12 +71,12 @@ public class RestPostControllerV3 {
     }
 
     @PostMapping("/new")
-    public String addPost(@RequestParam("title") String title, @RequestParam("content") String content) {
+    public ResponseEntity<String> addPost(@RequestBody PostDto postDto, HttpServletRequest request) {
         log.info("==========> 게시글 추가 기능 호출", "/post/v1/new");
 
-        postService.save(title, content);
+        log.info("postDto: {}", postDto);
 
-        return "redirect:/post/v1/list";
+        return ResponseEntity.ok("게시글 추가 요청");
     }
 
     // 게시글 검색

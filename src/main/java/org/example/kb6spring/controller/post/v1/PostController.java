@@ -82,4 +82,9 @@ public class PostController {
 
         return "post/compare";
     }
+    
+    @GetMapping("/error")
+    public void error(Model model) {
+        throw new RuntimeException("의도적으로 발생 시킨 예외");
+    }
 }

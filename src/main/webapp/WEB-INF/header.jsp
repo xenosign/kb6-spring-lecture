@@ -15,6 +15,8 @@
     <a href="/">Home</a>
     <a href="/post/v1/list">게시판</a>
     <a href="/post/v1/compare">DB(MySQL, Redis) 조회 속도 비교</a>
+    <a href="/post/v1/404">404</a>
+    <a href="/post/v1/error">ERROR</a>
 
     <h3>게시판 V2</h3>
     <a href="/">Home</a>
