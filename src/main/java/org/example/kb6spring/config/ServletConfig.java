@@ -9,11 +9,11 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
-@ComponentScan(basePackages = {"org.example.kb6spring.controller"})
+@ComponentScan(basePackages = {"org.example.kb6spring.controller",  "org.example.kb6spring.exception"})
 public class ServletConfig implements WebMvcConfigurer {
     // 웹 관련 Bean 은 ServletConfig 에서 등록 합니다
     // @Controller, @RestController 등
-    
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
