@@ -16,6 +16,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
@@ -24,15 +25,15 @@ import javax.sql.DataSource;
 @MapperScan(basePackages = {"org.example.kb6spring.mapper"})
 @ComponentScan(basePackages = {"org.example.kb6spring"})
 public class RootConfig {
-//    @Value("${jdbc.driver}") String driver;
-//    @Value("${jdbc.url}") String url;
-//    @Value("${jdbc.username}") String username;
-//    @Value("${jdbc.password}") String password;
+    @Value("${jdbc.driver}") String driver;
+    @Value("${jdbc.url}") String url;
+    @Value("${jdbc.username}") String username;
+    @Value("${jdbc.password}") String password;
 
-    @Value("com.mysql.cj.jdbc.Driver") String driver;
-    @Value("jdbc:mysql://127.0.0.1:3306/tetzdb") String url;
-    @Value("root") String username;
-    @Value("1234") String password;
+//    @Value("com.mysql.cj.jdbc.Driver") String driver;
+//    @Value("jdbc:mysql://127.0.0.1:3306/tetzdb") String url;
+//    @Value("root") String username;
+//    @Value("1234") String password;
 
     @Bean
     public DataSource dataSource() {

@@ -14,26 +14,14 @@ import java.util.Arrays;
 
 @ControllerAdvice
 @Slf4j
-public class CommonExceptionAdvice {
+public class RestExceptionAdvice {
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> notFoundTodo(EntityNotFoundException e) {
+    public ResponseEntity<String> notFoundTodo(NoHandlerFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handle404(NoHandlerFoundException e) {
-        return "/exception/404";
-    }
-
     @ExceptionHandler(Exception.class)
-    public String exception(Exception e, Model model) {
-        log.error("========> 500 에러, {}", e.getMessage());
-        e.printStackTrace();
-
-        model.addAttribute("errorMessage", e.getMessage());
-        model.addAttribute("stackTrace", Arrays.asList(e.getStackTrace()));
-
-        return "/exception/500";
+    public ResponseEntity<String> exception(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 }

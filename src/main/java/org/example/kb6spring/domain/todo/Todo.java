@@ -15,6 +15,6 @@ public class Todo {
     private Integer id;
     @Column(name = "todo", nullable = false)
     private String todo;
-    @Column(name = "done", nullable = true)
-    private String done;
+    @Column(name = "done", nullable = false)
+    private Boolean done = false;
 }
