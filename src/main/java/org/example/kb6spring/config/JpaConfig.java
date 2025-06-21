@@ -44,12 +44,21 @@ public class JpaConfig {
     @Value("${hibernate.format_sql}")
     private String formatSql;
 
+//    private Properties additionalProperties() {
+//        Properties properties = new Properties();
+//        properties.setProperty("hibernate.dialect", dialect);
+//        properties.setProperty("hibernate.hbm2ddl.auto", hbm2ddlAuto);
+//        properties.setProperty("hibernate.show_sql", hibernateShowSql);
+//        properties.setProperty("hibernate.format_sql", formatSql);
+//        return properties;
+//    }
+
     private Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", dialect);
-        properties.setProperty("hibernate.hbm2ddl.auto", hbm2ddlAuto);
-        properties.setProperty("hibernate.show_sql", hibernateShowSql);
-        properties.setProperty("hibernate.format_sql", formatSql);
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        properties.setProperty("hibernate.hbm2ddl.auto", "create");
+        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.format_sql", "true");
         return properties;
     }
 }
