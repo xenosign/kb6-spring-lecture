@@ -1,8 +1,8 @@
 package org.example.kb6spring.config;
 
-import org.example.kb6spring.security.config.SecurityConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.access.SecurityConfig;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -11,14 +11,14 @@ import javax.servlet.ServletRegistration;
 
 
 @Configuration
-@Import(SecurityConfig.class)
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{
                 RootConfig.class,
                 RedisConfig.class,
-                JpaConfig.class
+                JpaConfig.class,
+                SecurityConfig.class
         };
     }
 
