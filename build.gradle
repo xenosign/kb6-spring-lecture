@@ -14,6 +14,7 @@ ext {
     junitVersion = '5.10.2'
     lombokVersion = '1.18.30'
     springVersion = '5.3.37'
+    springSecurityVersion = '5.8.13'
 }
 
 sourceCompatibility = '1.8'
@@ -85,6 +86,15 @@ dependencies {
     // Swagger
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    // Security
+    implementation("org.springframework.security:spring-security-web:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-config:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-core:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
+
+    // Encryption
+    implementation 'org.springframework.security:spring-security-crypto'
 }
 
 test {
