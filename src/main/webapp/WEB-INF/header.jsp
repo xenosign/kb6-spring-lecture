@@ -21,4 +21,9 @@
     <h3>게시판 V2</h3>
     <a href="/">Home</a>
     <a href="/post/v2/list">REST 게시글</a>
+
+    <h3>로그인 V1</h3>
+    <a href="/">Home</a>
+    <a href="/user/register">회원 가입</a>
+    <a href="/user/login">로그인</a>
 </div>

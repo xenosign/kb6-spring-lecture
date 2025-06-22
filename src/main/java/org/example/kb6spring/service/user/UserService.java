@@ -6,30 +6,21 @@ import org.example.kb6spring.domain.user.User;
 import org.example.kb6spring.exception.user.InvalidPasswordException;
 import org.example.kb6spring.exception.user.UserNotFoundException;
 import org.example.kb6spring.repository.user.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public User findByUsername(String username) {
-        log.debug("사용자 조회 요청: {}", username);
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("해당 user 를 찾을 수 없습니다: " + username));
-    }
-
-    @Transactional(readOnly = true)
-    public User login(String username, String rawPassword) {
-        User user = findByUsername(username);
-
-        if (!user.getPassword().equals(rawPassword)) {
-            throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
-        }
-
-        return user;
+    public void save(User user) {
+        user.setRole("ROLE_MEMBER");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 }
