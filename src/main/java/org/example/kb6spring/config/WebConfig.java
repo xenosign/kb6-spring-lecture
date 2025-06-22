@@ -18,8 +18,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
         return new Class[]{
                 RootConfig.class,
                 RedisConfig.class,
-                JpaConfig.class,
-                SecurityConfig.class
+                JpaConfig.class
         };
     }
 

@@ -1,6 +1,8 @@
 package org.example.kb6spring.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kb6spring.exception.user.LoginException;
+import org.example.kb6spring.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -24,6 +26,13 @@ public class CommonExceptionAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handle404(NoHandlerFoundException e) {
         return "/exception/404";
+    }
+
+    // 로그인 관련 예외 처리
+    @ExceptionHandler(LoginException.class)
+    public String handleUserNotFound(LoginException e, Model model) {
+        model.addAttribute("message", e.getMessage());
+        return "/user/login-failed";
     }
 
     @ExceptionHandler(Exception.class)

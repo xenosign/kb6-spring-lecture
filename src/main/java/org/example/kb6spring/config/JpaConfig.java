@@ -18,7 +18,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
-@EnableJpaRepositories(basePackages = "org.example.kb6spring.domain")
+@EnableJpaRepositories(basePackages = {"org.example.kb6spring.domain", "org.example.kb6spring.repository"})
 public class JpaConfig {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
