@@ -44,8 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/user/**").permitAll()
-                .antMatchers("/admin/**").permitAll()
-                .antMatchers("/**").access("hasRole('ROLE_MEMBER)')");
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/member/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
+                .antMatchers("/**").authenticated();
+
+        http.addFilterBefore(encodingFilter(), CsrfFilter.class);
 
         http.formLogin()
                 .loginPage("/user/login")
@@ -53,6 +56,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/user/login-success")
                 .failureUrl("/user/login-failure");
 
-        http.addFilterBefore(encodingFilter(), CsrfFilter.class);
+        http.logout()
+                .logoutUrl("/user/logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("remember-me", "JSESSIONID")
+                .logoutSuccessUrl("/user/login")
+                .permitAll();
     }
 }
