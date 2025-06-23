@@ -26,10 +26,10 @@ public class UserController {
     private final UserService userService;
     private final CustomUserDetailsService customUserDetailsService;
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        return "user/login";
-    }
+//    @GetMapping("/login")
+//    public String login(Model model) {
+//        return "user/login";
+//    }
 
     @GetMapping("/register")
     public String register(Model model) {
