@@ -8,7 +8,6 @@
 <body>
 
 <h1>로그인 실패</h1>
-<h2>${message}</h2>
 <a href="/user/login">로그인 페이지로 이동</a>
 </body>
 </html>
