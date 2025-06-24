@@ -10,15 +10,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
-
-
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +29,51 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
+
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .cors().and()
+            .httpBasic().disable()
+            .csrf().disable()
+            .formLogin().disable();
+
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/user/**").permitAll()
+                .antMatchers("/auth/admin").hasRole("ADMIN")
+                .antMatchers("/auth/member").hasAnyRole("ADMIN", "MEMBER")
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/**").authenticated();
+
+        http.addFilterBefore(new JwtLoginFilter(authenticationManager(), jwtTokenProvider),
+                UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+
+
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -40,34 +87,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return encodingFilter;
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        JwtLoginFilter loginFilter = new JwtLoginFilter(authenticationManager(), jwtTokenProvider);
-        JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtTokenProvider);
-
-        loginFilter.setFilterProcessesUrl("/user/login");
-
-        http
-                .csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 💡 세션 사용 안 함
-                .and()
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/user/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/member/**").hasAnyRole("ADMIN", "MEMBER")
-                .antMatchers("/**").authenticated()
-                .and()
-                .addFilterBefore(encodingFilter(), CsrfFilter.class)
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .addFilter(loginFilter);
-    }
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        JwtLoginFilter loginFilter = new JwtLoginFilter(authenticationManager(), jwtTokenProvider);
+//        JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtTokenProvider);
+//
+//        loginFilter.setFilterProcessesUrl("/user/login");
+//
+//        http
+//                .csrf().disable()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 💡 세션 사용 안 함
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/").permitAll()
+//                .antMatchers("/user/**").permitAll()
+//                .antMatchers("/admin/**").hasRole("ADMIN")
+//                .antMatchers("/member/**").hasAnyRole("ADMIN", "MEMBER")
+//                .antMatchers("/**").authenticated()
+//                .and()
+//                .addFilterBefore(encodingFilter(), CsrfFilter.class)
+//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+//                .addFilter(loginFilter);
+//    }
 
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {

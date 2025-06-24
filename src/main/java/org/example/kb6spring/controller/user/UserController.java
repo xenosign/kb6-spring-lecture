@@ -11,10 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -37,7 +34,10 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(User user, Model model) {
+    public String register(@RequestBody User user) {
+        System.out.println(user.getUsername());
+        System.out.println(user.getPassword());
+        System.out.println(user.getRole());
         userService.save(user);
         return "redirect:/user/login";
     }
@@ -47,6 +47,7 @@ public class UserController {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(principal.getName());
 
         log.info("===========> userDetails: {}", userDetails);
+        log.info("===========> principal: {}", principal);
         log.info("===========> auth: {}", auth);
 
         model.addAttribute("user", userDetails.getUsername());

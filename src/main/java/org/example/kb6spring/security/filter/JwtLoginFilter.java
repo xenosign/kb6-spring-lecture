@@ -23,7 +23,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     public JwtLoginFilter(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        setFilterProcessesUrl("/user/login"); // 로그인 경로
+        setFilterProcessesUrl("/auth/login"); // 로그인 경로
     }
 
     @Override
@@ -44,9 +44,17 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException {
-        String token = jwtTokenProvider.createToken(authResult.getName(), Arrays.asList("ROLE_MEMBER"));
+
+        String role = authResult.getAuthorities().iterator().next().getAuthority();
+
+        String token = jwtTokenProvider.createToken(authResult.getName(), Arrays.asList(role));
+
+        response.setHeader("Access-Control-Expose-Headers", "Authorization");
         response.setHeader("Authorization", "Bearer " + token);
         response.setContentType("application/json");
-        response.getWriter().write("{\"token\":\"" + token + "\"}");
+
+        String responseBody = String.format("{\"token\":\"%s\", \"role\":\"%s\"}", token, role);
+
+        response.getWriter().write(responseBody);
     }
 }

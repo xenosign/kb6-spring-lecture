@@ -9,9 +9,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
@@ -33,11 +35,21 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        String username = getUsername(token);
-        return new UsernamePasswordAuthenticationToken(
-                username, "",
-                Arrays.asList(new SimpleGrantedAuthority("ROLE_MEMBER"))
-        );
+        Claims claims = Jwts.parser()
+                .setSigningKey(TOKEN_SECRET.getBytes())
+                .parseClaimsJws(token)
+                .getBody();
+
+        String username = claims.getSubject();
+
+        List<String> roles = claims.get("roles", List.class);
+
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (String role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
+
+        return new UsernamePasswordAuthenticationToken(username, "", authorities);
     }
 
     public String getUsername(String token) {
