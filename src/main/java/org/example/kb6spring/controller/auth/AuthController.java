@@ -19,7 +19,7 @@ public class AuthController {
 
     @GetMapping("/member")
     public ResponseEntity<String> member() {
-        return ResponseEntity.ok("이 문자열은 MEMBER 권한에서만 확인이 가능합니다!");
+        return ResponseEntity.ok("이 문자열은 MEMBER 권한 이상이면 확인이 가능합니다!");
     }
 
     @GetMapping("/normal")
