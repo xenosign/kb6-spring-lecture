@@ -26,5 +26,4 @@ public class AuthController {
     public ResponseEntity<String> any() {
         return ResponseEntity.ok("이 문자열은 로그인만 되면 확인이 가능합니다!");
     }
-
 }

@@ -39,7 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .formLogin().disable();
 
-
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
@@ -47,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/auth/admin").hasRole("ADMIN")
                 .antMatchers("/auth/member").hasAnyRole("ADMIN", "MEMBER")
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/**").authenticated()
                 .antMatchers("/**").authenticated();
 
         http.addFilterBefore(new JwtLoginFilter(authenticationManager(), jwtTokenProvider),
@@ -73,8 +72,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new CorsFilter(source);
     }
 
-
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -89,11 +86,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {
-//        JwtLoginFilter loginFilter = new JwtLoginFilter(authenticationManager(), jwtTokenProvider);
-//        JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtTokenProvider);
-//
-//        loginFilter.setFilterProcessesUrl("/user/login");
-//
 //        http
 //                .csrf().disable()
 //                .sessionManagement()

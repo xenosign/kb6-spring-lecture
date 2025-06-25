@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
-    private final String TOKEN_SECRET = "tetz-secret-token-key-for-make-jwt-token";
+    private final String TOKEN_SECRET = "tetz-secret-token-key-a-zip-gago-sip-da";
     private final long TOKEN_VALIDITY = 1000 * 60 * 60;
 
     public String createToken(String username, List<String> roles) {
@@ -34,6 +35,17 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                    .setSigningKey(TOKEN_SECRET.getBytes())
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(TOKEN_SECRET.getBytes())
@@ -46,26 +58,10 @@ public class JwtTokenProvider {
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (String role : roles) {
+            System.out.println(role);
             authorities.add(new SimpleGrantedAuthority(role));
         }
 
         return new UsernamePasswordAuthenticationToken(username, "", authorities);
-    }
-
-    public String getUsername(String token) {
-        return Jwts.parser()
-                .setSigningKey(TOKEN_SECRET.getBytes())
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(TOKEN_SECRET.getBytes()).parseClaimsJws(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
     }
 }
