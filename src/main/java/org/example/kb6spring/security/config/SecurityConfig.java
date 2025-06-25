@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/user/**").permitAll()
+                .antMatchers("/oauth/**").permitAll() // Oauth 접근은 모두 허용
                 .antMatchers("/auth/admin").hasRole("ADMIN")
                 .antMatchers("/auth/member").hasAnyRole("ADMIN", "MEMBER")
                 .antMatchers("/auth/**").authenticated()
