@@ -58,7 +58,6 @@ public class JwtTokenProvider {
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (String role : roles) {
-            System.out.println(role);
             authorities.add(new SimpleGrantedAuthority(role));
         }
 
