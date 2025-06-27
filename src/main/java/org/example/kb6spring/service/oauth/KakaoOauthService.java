@@ -29,16 +29,19 @@ public class KakaoOauthService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-//    @Value("${kakao.client-id}")
-//    private String clientId;
+    @Value("${kakao.rest_key}")
+    private String restKey;
 
-//    @Value("${kakao.redirect-uri}")
-//    private String redirectUri;
+    @Value("${kakao.redirect_uri}")
+    private String redirectUri;
 
     private String REST_API_KEY = "2be90ab71a1f36d735f12cd91b53a982";
     private String REDIRECT_URI = "http://localhost:8080/oauth/kakao/callback";
 
     public KakaoUserInfoDto processKakaoLogin(String code) {
+        System.out.println(restKey);
+        System.out.println(redirectUri);
+
         String accessToken = this.getAccessToken(code);
         KakaoUserInfoDto userInfo = this.getUserInfo(accessToken);
 
