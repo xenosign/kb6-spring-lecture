@@ -38,13 +38,14 @@
 
     <!-- Hibernate SQL Logger -->
     <logger name="org.hibernate.SQL">
-        <level value="DEBUG" />
+<!--        <level value="DEBUG" />-->
+        <level value="OFF" />
         <appender-ref ref="console" />
     </logger>
 
     <!-- Hibernate Parameter Binding Logger -->
     <logger name="org.hibernate.type.descriptor.sql.BasicBinder">
-        <level value="TRACE" />
+        <level value="OFF" />
         <appender-ref ref="console" />
     </logger>
 
