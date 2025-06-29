@@ -21,9 +21,8 @@ public class IndexTestController {
 
     private final IndexTestService indexTestService;
 
-    /**
-     * 테스트 데이터 생성
-     */
+    // POST
+    // http://localhost:8080/index-test/generate-data
     @PostMapping("/generate-data")
     public ResponseEntity<String> generateTestData(@RequestParam(defaultValue = "10000") int count) {
         try {
@@ -36,33 +35,30 @@ public class IndexTestController {
         }
     }
 
-    /**
-     * 이메일 조회 성능 테스트 (인덱스 사용)
-     */
+    // 인덱스 적용
+    // GET
+    // http://localhost:8080/index-test/performance/email
     @GetMapping("/performance/email")
     public ResponseEntity<PerformanceTestResult> testEmailPerformance(
-            @RequestParam String email,
-            @RequestParam(defaultValue = "1000") int iterations) {
+            @RequestParam(defaultValue = "email9999") String email,
+            @RequestParam(defaultValue = "1") int iterations) {
 
         PerformanceTestResult result = indexTestService.findByEmailPerformanceTest(email, iterations);
         return ResponseEntity.ok(result);
     }
-
-    /**
-     * 사용자명 조회 성능 테스트 (인덱스 미사용)
-     */
+    
+    // 인덱스 미적용
+    // GET
+    // http://localhost:8080/index-test/performance/username
     @GetMapping("/performance/username")
     public ResponseEntity<PerformanceTestResult> testUsernamePerformance(
-            @RequestParam String username,
-            @RequestParam(defaultValue = "1000") int iterations) {
+            @RequestParam(defaultValue = "user9999") String username,
+            @RequestParam(defaultValue = "1") int iterations) {
 
         PerformanceTestResult result = indexTestService.findByUsernamePerformanceTest(username, iterations);
         return ResponseEntity.ok(result);
     }
 
-    /**
-     * LIKE 검색 성능 비교 테스트
-     */
     @GetMapping("/performance/like-search")
     public ResponseEntity<List<PerformanceTestResult>> testLikeSearchPerformance(
             @RequestParam String keyword,
@@ -72,9 +68,6 @@ public class IndexTestController {
         return ResponseEntity.ok(results);
     }
 
-    /**
-     * 페이징 성능 테스트
-     */
     @GetMapping("/performance/paging")
     public ResponseEntity<PerformanceTestResult> testPagingPerformance(
             @RequestParam(defaultValue = "test") String emailPrefix,
@@ -85,9 +78,6 @@ public class IndexTestController {
         return ResponseEntity.ok(result);
     }
 
-    /**
-     * 복합 조건 검색 성능 테스트
-     */
     @GetMapping("/performance/complex")
     public ResponseEntity<PerformanceTestResult> testComplexSearchPerformance(
             @RequestParam String email,
@@ -98,9 +88,6 @@ public class IndexTestController {
         return ResponseEntity.ok(result);
     }
 
-    /**
-     * 전체 성능 테스트 실행
-     */
     @GetMapping("/performance/full-test")
     public ResponseEntity<List<PerformanceTestResult>> runFullPerformanceTest() {
         List<PerformanceTestResult> results = Arrays.asList(
@@ -113,9 +100,6 @@ public class IndexTestController {
         return ResponseEntity.ok(results);
     }
 
-    /**
-     * 단일 이메일 조회
-     */
     @GetMapping("/email/{email}")
     public ResponseEntity<IndexTestDto> findByEmail(@PathVariable String email) {
         Optional<IndexTestDto> result = indexTestService.findByEmail(email);
@@ -123,27 +107,18 @@ public class IndexTestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * 전체 데이터 조회
-     */
     @GetMapping("/all")
     public ResponseEntity<List<IndexTestDto>> findAll() {
         List<IndexTestDto> results = indexTestService.findAll();
         return ResponseEntity.ok(results);
     }
 
-    /**
-     * 데이터 개수 조회
-     */
     @GetMapping("/count")
     public ResponseEntity<Long> getTotalCount() {
         long count = indexTestService.getTotalCount();
         return ResponseEntity.ok(count);
     }
 
-    /**
-     * 모든 테스트 데이터 삭제
-     */
     @DeleteMapping("/clear-data")
     public ResponseEntity<String> clearAllData() {
         try {
@@ -156,9 +131,6 @@ public class IndexTestController {
         }
     }
 
-    /**
-     * 성능 테스트 결과 비교 (인덱스 vs 비인덱스)
-     */
     @GetMapping("/performance/comparison")
     public ResponseEntity<List<PerformanceTestResult>> performanceComparison(
             @RequestParam(defaultValue = "1000") int iterations) {
@@ -168,7 +140,6 @@ public class IndexTestController {
                 indexTestService.findByUsernamePerformanceTest("user500", iterations)
         );
 
-        // 성능 비교 로그 출력
         PerformanceTestResult emailResult = results.get(0);
         PerformanceTestResult usernameResult = results.get(1);
 

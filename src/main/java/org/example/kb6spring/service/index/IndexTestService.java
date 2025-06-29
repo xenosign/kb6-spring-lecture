@@ -37,7 +37,7 @@ public class IndexTestService {
         for (int i = 0; i < count; i++) {
             IndexTest indexTest = new IndexTest();
             indexTest.setUsername("user" + i);
-            indexTest.setEmail("test" + i + "@example.com");
+            indexTest.setEmail("email" + i);
             indexTest.setCreatedAt(LocalDateTime.now().minusDays(random.nextInt(365)));
 
             testDataList.add(indexTest);
