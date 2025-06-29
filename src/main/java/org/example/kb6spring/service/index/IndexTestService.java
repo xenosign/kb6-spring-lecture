@@ -36,8 +36,8 @@ public class IndexTestService {
 
         for (int i = 0; i < count; i++) {
             IndexTest indexTest = new IndexTest();
-            indexTest.setUsername("user" + i);
-            indexTest.setEmail("email" + i);
+            indexTest.setUsername(i + "user");
+            indexTest.setEmail(i + "email");
             indexTest.setCreatedAt(LocalDateTime.now().minusDays(random.nextInt(365)));
 
             testDataList.add(indexTest);
@@ -104,24 +104,41 @@ public class IndexTestService {
 
     // LIKE 검색 성능 비교
     @Transactional(readOnly = true)
-    public List<PerformanceTestResult> likeSearchPerformanceTest(String keyword, int iterations) {
+    public List<PerformanceTestResult> likeSearchPerformanceTest(String keyword, int iterations, String option) {
         List<PerformanceTestResult> results = new ArrayList<>();
 
         // 이메일 LIKE 검색 (인덱스 부분 사용)
         long startTime = System.currentTimeMillis();
-        for (int i = 0; i < iterations; i++) {
-            indexTestRepository.findByEmailContaining(keyword);
+        if (option == null) {
+            for (int i = 0; i < iterations; i++) {
+                indexTestRepository.findByEmailContaining(keyword);
+            }
+        } else {
+            for (int i = 0; i < iterations; i++) {
+                indexTestRepository.findByEmailStartingWith(keyword);
+            }
         }
+
         long endTime = System.currentTimeMillis();
 
-        results.add(PerformanceTestResult.builder()
-                .testName("이메일 LIKE 검색 (인덱스 부분 사용)")
-                .iterations(iterations)
-                .totalTime(endTime - startTime)
-                .averageTime((double) (endTime - startTime) / iterations)
-                .build());
+        if (option == null) {
+            results.add(PerformanceTestResult.builder()
+                    .testName("이메일 LIKE 검색 (인덱스 미사용)")
+                    .iterations(iterations)
+                    .totalTime(endTime - startTime)
+                    .averageTime((double) (endTime - startTime) / iterations)
+                    .build());
+        } else {
+            results.add(PerformanceTestResult.builder()
+                    .testName("이메일 LIKE 검색 (인덱스 부분 사용)")
+                    .iterations(iterations)
+                    .totalTime(endTime - startTime)
+                    .averageTime((double) (endTime - startTime) / iterations)
+                    .build());
+        }
 
-        // 사용자명 LIKE 검색 (인덱스 미사용)
+
+
         startTime = System.currentTimeMillis();
         for (int i = 0; i < iterations; i++) {
             indexTestRepository.findByUsernameContaining(keyword);
@@ -164,22 +181,46 @@ public class IndexTestService {
     // 복합 조건 검색 성능 테스트
     @Transactional(readOnly = true)
     public PerformanceTestResult complexSearchPerformanceTest(String email, String username, int iterations) {
-        log.info("복합 조건 검색 성능 테스트 시작");
 
+
+
+        if (email == null && username == null) {
+            throw new IllegalArgumentException("email 또는 username 중 하나는 필수입니다");
+        }
+
+        String testName;
         long startTime = System.currentTimeMillis();
 
-        for (int i = 0; i < iterations; i++) {
-            indexTestRepository.findByEmailAndUsername(email, username);
+        if (email != null && username != null) {
+            testName = "복합 조건 검색 (이메일 + 사용자명)";
+
+            for (int i = 0; i < iterations; i++) {
+                indexTestRepository.findByEmailAndUsername(email, username);
+            }
+
+        } else if (email != null) {
+            testName = "이메일 단일 조건 검색 (인덱스 적용)";
+
+            for (int i = 0; i < iterations; i++) {
+                indexTestRepository.findByEmail(email);
+            }
+        } else {
+            testName = "사용자명 단일 조건 검색 (인덱스 미적용)";
+
+            for (int i = 0; i < iterations; i++) {
+                indexTestRepository.findByUsername(username);
+            }
         }
 
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
+        double averageTime = (double) executionTime / iterations;
 
         return PerformanceTestResult.builder()
-                .testName("복합 조건 검색 (이메일 + 사용자명)")
+                .testName(testName)
                 .iterations(iterations)
                 .totalTime(executionTime)
-                .averageTime((double) executionTime / iterations)
+                .averageTime(averageTime)
                 .build();
     }
 

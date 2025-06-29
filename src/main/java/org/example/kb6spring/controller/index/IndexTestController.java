@@ -18,13 +18,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class IndexTestController {
+    private static final String DATA_COUNTS = "10000";
+    private static final String TEST_DATA_NUM = "9999";
+    private static final String ITERATIONS = "100";
 
     private final IndexTestService indexTestService;
 
     // POST
     // http://localhost:8080/index-test/generate-data
     @PostMapping("/generate-data")
-    public ResponseEntity<String> generateTestData(@RequestParam(defaultValue = "10000") int count) {
+    public ResponseEntity<String> generateTestData(@RequestParam(defaultValue = DATA_COUNTS) int count) {
         try {
             indexTestService.generateTestData(count);
             return ResponseEntity.ok(count + "개의 테스트 데이터 생성 완료");
@@ -35,55 +38,61 @@ public class IndexTestController {
         }
     }
 
-    // 인덱스 적용
+    // EMAIL 인덱스 적용
     // GET
     // http://localhost:8080/index-test/performance/email
     @GetMapping("/performance/email")
     public ResponseEntity<PerformanceTestResult> testEmailPerformance(
-            @RequestParam(defaultValue = "email9999") String email,
-            @RequestParam(defaultValue = "1") int iterations) {
-
+            @RequestParam(defaultValue = "email" + TEST_DATA_NUM) String email,
+            @RequestParam(defaultValue = ITERATIONS) int iterations
+    ) {
         PerformanceTestResult result = indexTestService.findByEmailPerformanceTest(email, iterations);
         return ResponseEntity.ok(result);
     }
-    
-    // 인덱스 미적용
+
+    // USERNAME 인덱스 미적용
     // GET
     // http://localhost:8080/index-test/performance/username
     @GetMapping("/performance/username")
     public ResponseEntity<PerformanceTestResult> testUsernamePerformance(
-            @RequestParam(defaultValue = "user9999") String username,
-            @RequestParam(defaultValue = "1") int iterations) {
-
+            @RequestParam(defaultValue = "user" + TEST_DATA_NUM) String username,
+            @RequestParam(defaultValue = ITERATIONS) int iterations
+    ) {
         PerformanceTestResult result = indexTestService.findByUsernamePerformanceTest(username, iterations);
         return ResponseEntity.ok(result);
     }
 
+    // 인덱스 미적용
+    // GET
+    // http://localhost:8080/index-test/performance/like-search?keyword=9999
+
+    // EMAIL 인덱스 적용
+    // GET
+    // http://localhost:8080/index-test/performance/like-search?keyword=9999&option=on
     @GetMapping("/performance/like-search")
     public ResponseEntity<List<PerformanceTestResult>> testLikeSearchPerformance(
-            @RequestParam String keyword,
-            @RequestParam(defaultValue = "500") int iterations) {
-
-        List<PerformanceTestResult> results = indexTestService.likeSearchPerformanceTest(keyword, iterations);
+            @RequestParam(defaultValue = TEST_DATA_NUM) String keyword,
+            @RequestParam(defaultValue = ITERATIONS) int iterations,
+            @RequestParam(required = false) String option
+    ) {
+        List<PerformanceTestResult> results = indexTestService.likeSearchPerformanceTest(keyword, iterations, option);
         return ResponseEntity.ok(results);
     }
 
-    @GetMapping("/performance/paging")
-    public ResponseEntity<PerformanceTestResult> testPagingPerformance(
-            @RequestParam(defaultValue = "test") String emailPrefix,
-            @RequestParam(defaultValue = "20") int pageSize,
-            @RequestParam(defaultValue = "50") int pageCount) {
+    // 최적 조건, EMAIL 만 검색
+    // http://localhost:8080/index-test/performance/complex?email=9999email
 
-        PerformanceTestResult result = indexTestService.pagingPerformanceTest(emailPrefix, pageSize, pageCount);
-        return ResponseEntity.ok(result);
-    }
+    // 일반 조건, EMAIL 과 USERNAME 동시 검색
+    // http://localhost:8080/index-test/performance/complex?email=9999email&user=9999user
 
+    // 최악 조건, USERNAME 만 검색
+    // http://localhost:8080/index-test/performance/complex?user=9999user
     @GetMapping("/performance/complex")
     public ResponseEntity<PerformanceTestResult> testComplexSearchPerformance(
-            @RequestParam String email,
-            @RequestParam String username,
-            @RequestParam(defaultValue = "1000") int iterations) {
-
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String username,
+            @RequestParam(defaultValue = ITERATIONS) int iterations
+    ) {
         PerformanceTestResult result = indexTestService.complexSearchPerformanceTest(email, username, iterations);
         return ResponseEntity.ok(result);
     }
@@ -119,6 +128,8 @@ public class IndexTestController {
         return ResponseEntity.ok(count);
     }
 
+    // DELETE
+    // http://localhost:8080/index-test/clear-data
     @DeleteMapping("/clear-data")
     public ResponseEntity<String> clearAllData() {
         try {
@@ -133,8 +144,8 @@ public class IndexTestController {
 
     @GetMapping("/performance/comparison")
     public ResponseEntity<List<PerformanceTestResult>> performanceComparison(
-            @RequestParam(defaultValue = "1000") int iterations) {
-
+            @RequestParam(defaultValue = ITERATIONS) int iterations
+    ) {
         List<PerformanceTestResult> results = Arrays.asList(
                 indexTestService.findByEmailPerformanceTest("test500@example.com", iterations),
                 indexTestService.findByUsernamePerformanceTest("user500", iterations)

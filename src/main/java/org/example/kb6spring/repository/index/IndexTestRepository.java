@@ -23,8 +23,11 @@ public interface IndexTestRepository extends JpaRepository<IndexTest, Long> {
     // 사용자명 LIKE 검색 (인덱스 미사용)
     List<IndexTest> findByUsernameContaining(String username);
 
-    // 이메일 LIKE 검색 (인덱스 부분 사용)
+    // 이메일 LIKE 검색 (인덱스 미사용)
     List<IndexTest> findByEmailContaining(String email);
+
+    // 이메일 LIKE 검색 (인덱스 사용, prefix)
+    List<IndexTest> findByEmailStartingWith(String email);
 
     // 생성일 범위 조회 (인덱스 미사용)
     List<IndexTest> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
