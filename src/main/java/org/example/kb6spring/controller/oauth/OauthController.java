@@ -2,8 +2,11 @@ package org.example.kb6spring.controller.oauth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.kb6spring.domain.user.User;
 import org.example.kb6spring.dto.oauth.KakaoUserInfoDto;
+import org.example.kb6spring.repository.user.UserRepository;
 import org.example.kb6spring.service.oauth.KakaoOauthService;
+import org.example.kb6spring.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/oauth")
 public class OauthController {
     private final KakaoOauthService kakaoOauthService;
+    private KakaoUserInfoDto kakaoUserInfo;
 
     @GetMapping("/kakao/callback")
     public void kakaoCallback(
@@ -29,6 +33,7 @@ public class OauthController {
             HttpServletResponse response) throws IOException {
 
         KakaoUserInfoDto userInfo = kakaoOauthService.processKakaoLogin(code);
+        kakaoUserInfo = userInfo;
 
         Cookie cookie = new Cookie("jwt", userInfo.getToken());
         cookie.setHttpOnly(true);
@@ -38,20 +43,11 @@ public class OauthController {
         response.addCookie(cookie);
 
         String frontendRedirect = (state != null) ? state : "http://localhost:5173";
+        response.sendRedirect(frontendRedirect);
+    }
 
-        String encodedEmail = URLEncoder.encode(userInfo.getEmail(), "UTF-8");
-        String encodedNickname = URLEncoder.encode(userInfo.getNickname(), "UTF-8");
-        String encodedProfileImageUrl = URLEncoder.encode(userInfo.getProfileImageUrl(), "UTF-8");
-
-        String redirectUrl = String.format(
-                "%s?email=%s&nickname=%s&profileImage=%s",
-                frontendRedirect,
-                encodedEmail,
-                encodedNickname,
-                encodedProfileImageUrl
-        );
-
-        // 5. 리다이렉트
-        response.sendRedirect(redirectUrl);
+    @GetMapping("/user/me")
+    public ResponseEntity<KakaoUserInfoDto> getKakaoUserInfo() {
+        return ResponseEntity.ok(kakaoUserInfo);
     }
 }

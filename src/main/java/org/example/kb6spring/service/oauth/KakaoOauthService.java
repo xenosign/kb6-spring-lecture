@@ -30,18 +30,15 @@ public class KakaoOauthService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${kakao.rest_key}")
-    private String restKey;
+    private String REST_API_KEY;
 
     @Value("${kakao.redirect_uri}")
-    private String redirectUri;
+    private String REDIRECT_URI;
 
-    private String REST_API_KEY = "2be90ab71a1f36d735f12cd91b53a982";
-    private String REDIRECT_URI = "http://localhost:8080/oauth/kakao/callback";
+//    private String REST_API_KEY = "2be90ab71a1f36d735f12cd91b53a982";
+//    private String REDIRECT_URI = "http://localhost:8080/oauth/kakao/callback";
 
     public KakaoUserInfoDto processKakaoLogin(String code) {
-        System.out.println(restKey);
-        System.out.println(redirectUri);
-
         String accessToken = this.getAccessToken(code);
         KakaoUserInfoDto userInfo = this.getUserInfo(accessToken);
 
@@ -56,6 +53,8 @@ public class KakaoOauthService {
     }
 
     public String getAccessToken(String authorizationCode) {
+        String tokenUrl = "https://kauth.kakao.com/oauth/token";
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -65,13 +64,24 @@ public class KakaoOauthService {
         params.add("redirect_uri", REDIRECT_URI);
         params.add("code", authorizationCode);
 
+        // 전체 요청 URL 확인용
+        String fullUrl = tokenUrl + "?" +
+                "grant_type=authorization_code" +
+                "&client_id=" + REST_API_KEY +
+                "&redirect_uri=" + REDIRECT_URI +
+                "&code=" + authorizationCode;
+
+        log.info("카카오 토큰 요청 전체 URL: {}", fullUrl);
+
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-                "https://kauth.kakao.com/oauth/token",
+                tokenUrl,
                 request,
                 String.class
         );
+
+        log.info("카카오 토큰 요청에 대한 전체 응답: {}", response.getBody());
 
         try {
             JsonNode root = objectMapper.readTree(response.getBody());
@@ -83,6 +93,8 @@ public class KakaoOauthService {
     }
 
     public KakaoUserInfoDto getUserInfo(String accessToken) {
+        String userUrl = "https://kapi.kakao.com/v2/user/me";
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.set("Authorization", "Bearer " + accessToken);
@@ -90,18 +102,20 @@ public class KakaoOauthService {
         HttpEntity<String> request = new HttpEntity<>(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "https://kapi.kakao.com/v2/user/me",
+                userUrl,
                 HttpMethod.POST,
                 request,
                 String.class
         );
+
+        log.info("카카오 토큰 요청에 대한 전체 응답: {}", response.getBody());
 
         try {
             JsonNode root = objectMapper.readTree(response.getBody());
             Long kakaoId = root.get("id").asLong();
 
             JsonNode kakaoAccount = root.get("kakao_account");
-            String email = kakaoAccount.get("email").asText(null); // 이메일 비동의 시 null
+            String email = kakaoAccount.get("email").asText(null);
 
             JsonNode profile = kakaoAccount.get("profile");
             String nickname = profile.get("nickname").asText(null);
