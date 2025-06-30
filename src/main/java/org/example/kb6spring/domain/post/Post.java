@@ -17,7 +17,7 @@ import java.util.List;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String title;
 
@@ -30,15 +30,5 @@ public class Post {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-    }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setPost(this);
-    }
-
-    public void removeComment(Comment comment) {
-        comments.remove(comment);
-        comment.setPost(null);
     }
 }

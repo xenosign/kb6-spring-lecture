@@ -24,9 +24,9 @@ public class IndexTestController {
 
     private final IndexTestService indexTestService;
 
-    // POST
+    // GET
     // http://localhost:8080/index-test/generate-data
-    @PostMapping("/generate-data")
+    @GetMapping("/generate-data")
     public ResponseEntity<String> generateTestData(@RequestParam(defaultValue = DATA_COUNTS) int count) {
         try {
             indexTestService.generateTestData(count);

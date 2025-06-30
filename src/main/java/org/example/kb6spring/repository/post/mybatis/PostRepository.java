@@ -1,8 +1,7 @@
-package org.example.kb6spring.repository.post;
+package org.example.kb6spring.repository.post.mybatis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.example.kb6spring.dto.post.PostDto;
 import org.example.kb6spring.mapper.PostMapper;
 import org.springframework.data.redis.core.RedisTemplate;

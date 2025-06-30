@@ -2,7 +2,7 @@ package org.example.kb6spring.service.post;
 
 import lombok.RequiredArgsConstructor;
 import org.example.kb6spring.dto.post.PostDto;
-import org.example.kb6spring.repository.post.PostRepository;
+import org.example.kb6spring.repository.post.mybatis.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
