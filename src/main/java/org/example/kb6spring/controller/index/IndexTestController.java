@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.kb6spring.dto.index.IndexTestDto;
 import org.example.kb6spring.dto.index.PerformanceTestResult;
 import org.example.kb6spring.service.index.IndexTestService;
+import org.example.kb6spring.service.index.NightmareService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,10 @@ public class IndexTestController {
     private static final String ITERATIONS = "100";
 
     private final IndexTestService indexTestService;
+    private final NightmareService nightmareService;
 
-    // GET
-    // http://localhost:8080/index-test/generate-data
+    // 테스트 데이터 생성
+    // GET, http://localhost:8080/index-test/generate-data
     @GetMapping("/generate-data")
     public ResponseEntity<String> generateTestData(@RequestParam(defaultValue = DATA_COUNTS) int count) {
         try {
@@ -38,9 +40,8 @@ public class IndexTestController {
         }
     }
 
-    // EMAIL 인덱스 적용
-    // GET
-    // http://localhost:8080/index-test/performance/email
+    // 인덱스 적용, EMAIL 검색
+    // GET, http://localhost:8080/index-test/performance/email
     @GetMapping("/performance/email")
     public ResponseEntity<PerformanceTestResult> testEmailPerformance(
             @RequestParam(defaultValue = "email" + TEST_DATA_NUM) String email,
@@ -50,9 +51,8 @@ public class IndexTestController {
         return ResponseEntity.ok(result);
     }
 
-    // USERNAME 인덱스 미적용
-    // GET
-    // http://localhost:8080/index-test/performance/username
+    // 인덱스 미적용, username 검색
+    // GET, http://localhost:8080/index-test/performance/username
     @GetMapping("/performance/username")
     public ResponseEntity<PerformanceTestResult> testUsernamePerformance(
             @RequestParam(defaultValue = "user" + TEST_DATA_NUM) String username,
@@ -62,13 +62,11 @@ public class IndexTestController {
         return ResponseEntity.ok(result);
     }
 
-    // 인덱스 미적용
-    // GET
-    // http://localhost:8080/index-test/performance/like-search?keyword=9999
+    // 인덱스 적용 된, EMAIL 을 LIKE %email% 조건 검색
+    // GET, http://localhost:8080/index-test/performance/like-search?keyword=9999
 
-    // EMAIL 인덱스 적용
-    // GET
-    // http://localhost:8080/index-test/performance/like-search?keyword=9999&option=on
+    // 인덱스 적용 된, EMAIL 을 LIKE email% 조건 검색
+    // GET, http://localhost:8080/index-test/performance/like-search?keyword=9999&option=on
     @GetMapping("/performance/like-search")
     public ResponseEntity<List<PerformanceTestResult>> testLikeSearchPerformance(
             @RequestParam(defaultValue = TEST_DATA_NUM) String keyword,
@@ -97,68 +95,27 @@ public class IndexTestController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/performance/full-test")
-    public ResponseEntity<List<PerformanceTestResult>> runFullPerformanceTest() {
-        List<PerformanceTestResult> results = Arrays.asList(
-                indexTestService.findByEmailPerformanceTest("test100@example.com", 1000),
-                indexTestService.findByUsernamePerformanceTest("user100", 1000),
-                indexTestService.complexSearchPerformanceTest("test100@example.com", "user100", 1000),
-                indexTestService.pagingPerformanceTest("test", 20, 50)
+    // 나이트메어 테스트 데이터 생성
+    // GET, http://localhost:8080/index-test/nightmare/generate-data
+    @GetMapping("/nightmare/generate-data")
+    public ResponseEntity<String> generateNightmareData(@RequestParam(defaultValue = DATA_COUNTS) int count) {
+        long excutionTime = nightmareService.generateTestData(100000);
+
+        String message = "나이트메어 샘플 데이터 저장 완료!, 실행 시간 - " + excutionTime + " ms";
+        return ResponseEntity.ok(message);
+    }
+
+    // 나이트메어 샘플 데이터 저장
+    // GET, http://localhost:8080/index-test/nightmare/test
+    @GetMapping("/nightmare/test")
+    public ResponseEntity<String> insertNightmareSample() {
+        long executionTime = nightmareService.insertSampleData();
+
+        String message = String.format(
+                "나이트메어 샘플 데이터 저장 완료! 실행시간: %dms",
+                executionTime
         );
 
-        return ResponseEntity.ok(results);
-    }
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<IndexTestDto> findByEmail(@PathVariable String email) {
-        Optional<IndexTestDto> result = indexTestService.findByEmail(email);
-        return result.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<IndexTestDto>> findAll() {
-        List<IndexTestDto> results = indexTestService.findAll();
-        return ResponseEntity.ok(results);
-    }
-
-    @GetMapping("/count")
-    public ResponseEntity<Long> getTotalCount() {
-        long count = indexTestService.getTotalCount();
-        return ResponseEntity.ok(count);
-    }
-
-    // DELETE
-    // http://localhost:8080/index-test/clear-data
-    @DeleteMapping("/clear-data")
-    public ResponseEntity<String> clearAllData() {
-        try {
-            indexTestService.deleteAllData();
-            return ResponseEntity.ok("모든 테스트 데이터 삭제 완료");
-        } catch (Exception e) {
-            log.error("데이터 삭제 실패", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("데이터 삭제 실패: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/performance/comparison")
-    public ResponseEntity<List<PerformanceTestResult>> performanceComparison(
-            @RequestParam(defaultValue = ITERATIONS) int iterations
-    ) {
-        List<PerformanceTestResult> results = Arrays.asList(
-                indexTestService.findByEmailPerformanceTest("test500@example.com", iterations),
-                indexTestService.findByUsernamePerformanceTest("user500", iterations)
-        );
-
-        PerformanceTestResult emailResult = results.get(0);
-        PerformanceTestResult usernameResult = results.get(1);
-
-        log.info("=== 성능 비교 결과 ===");
-        log.info("이메일 조회 (인덱스): {}ms", emailResult.getAverageTime());
-        log.info("사용자명 조회 (비인덱스): {}ms", usernameResult.getAverageTime());
-        log.info("성능 차이: {}배", usernameResult.getAverageTime() / emailResult.getAverageTime());
-
-        return ResponseEntity.ok(results);
+        return ResponseEntity.ok(message);
     }
 }
