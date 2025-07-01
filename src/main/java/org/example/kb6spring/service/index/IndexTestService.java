@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional
 public class IndexTestService {
-
     private final IndexTestRepository indexTestRepository;
     private final Random random = new Random();
 
@@ -134,8 +133,6 @@ public class IndexTestService {
                     .build());
         }
 
-
-
         startTime = System.currentTimeMillis();
         for (int i = 0; i < iterations; i++) {
             indexTestRepository.findByUsernameContaining(keyword);
@@ -155,9 +152,6 @@ public class IndexTestService {
     // 복합(username, email) 검색
     @Transactional(readOnly = true)
     public PerformanceTestResult complexSearchPerformanceTest(String email, String username, int iterations) {
-
-
-
         if (email == null && username == null) {
             throw new IllegalArgumentException("email 또는 username 중 하나는 필수입니다");
         }
