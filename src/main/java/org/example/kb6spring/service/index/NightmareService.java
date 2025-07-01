@@ -53,41 +53,6 @@ public class NightmareService {
         }
     }
 
-
-    @Transactional
-    public Long insertSampleData() {
-        log.info("샘플 Nightmare 데이터 INSERT 시작");
-        long startTime = System.currentTimeMillis();
-
-        Nightmare nightmare = new Nightmare();
-        nightmare.setUserId(101); // 샘플 사용자 ID
-        nightmare.setProductId(201); // 샘플 상품 ID
-        nightmare.setOrderDate(LocalDate.now());
-        nightmare.setOrderDatetime(LocalDateTime.now());
-        nightmare.setAmount(new BigDecimal("150.00")); // 샘플 금액
-        nightmare.setQuantity(2); // 샘플 수량
-        nightmare.setStatus(Nightmare.OrderStatus.PENDING); // 샘플 상태
-        nightmare.setPaymentMethod(Nightmare.PaymentMethod.CREDIT_CARD); // 샘플 결제방법
-        nightmare.setShippingAddress("서울시 강남구 테헤란로 123"); // 샘플 주소
-        BigDecimal discountRate = new BigDecimal("0.05"); // 5% 할인
-        BigDecimal taxAmount = nightmare.getAmount().multiply(new BigDecimal("0.1")); // 10% 세금
-        BigDecimal totalAmount = nightmare.getAmount()
-                .subtract(nightmare.getAmount().multiply(discountRate))
-                .add(taxAmount);
-        nightmare.setDiscountRate(discountRate);
-        nightmare.setTaxAmount(taxAmount);
-        nightmare.setTotalAmount(totalAmount);
-
-        Nightmare savedNightmare = nightmareRepository.save(nightmare);
-
-        long endTime = System.currentTimeMillis();
-        long executionTime = endTime - startTime;
-
-        log.info("샘플 Nightmare 데이터 INSERT 완료 실행 시간: {}ms", executionTime);
-
-        return executionTime;
-    }
-
     private Nightmare createRandomNightmare(int orderIndex) {
         Nightmare nightmare = new Nightmare();
 

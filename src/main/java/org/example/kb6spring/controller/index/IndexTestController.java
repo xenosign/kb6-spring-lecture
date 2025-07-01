@@ -81,10 +81,10 @@ public class IndexTestController {
     // http://localhost:8080/index-test/performance/complex?email=9999email
 
     // 일반 조건, EMAIL 과 USERNAME 동시 검색
-    // http://localhost:8080/index-test/performance/complex?email=9999email&user=9999user
+    // http://localhost:8080/index-test/performance/complex?email=9999email&username=9999user
 
     // 최악 조건, USERNAME 만 검색
-    // http://localhost:8080/index-test/performance/complex?user=9999user
+    // http://localhost:8080/index-test/performance/complex?username=9999user
     @GetMapping("/performance/complex")
     public ResponseEntity<PerformanceTestResult> testComplexSearchPerformance(
             @RequestParam(required = false) String email,
@@ -103,19 +103,5 @@ public class IndexTestController {
 //
 //        String message = "나이트메어 샘플 데이터 저장 완료!, 실행 시간 - " + excutionTime + " ms";
 //        return ResponseEntity.ok(message);
-//    }
-//
-//    // 나이트메어 샘플 데이터 저장
-//    // GET, http://localhost:8080/index-test/nightmare/test
-//    @GetMapping("/nightmare/test")
-//    public ResponseEntity<String> insertNightmareSample() {
-//        long executionTime = nightmareService.insertSampleData();
-//
-//        String message = String.format(
-//                "나이트메어 샘플 데이터 저장 완료! 실행시간: %dms",
-//                executionTime
-//        );
-//
-//        return ResponseEntity.ok(message);
-//    }
+//    }   
 }
