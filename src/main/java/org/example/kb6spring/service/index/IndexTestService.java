@@ -191,14 +191,4 @@ public class IndexTestService {
                 .averageTime(averageTime)
                 .build();
     }
-
-    // Entity to DTO 변환
-    private IndexTestDto convertToDto(IndexTest entity) {
-        return IndexTestDto.builder()
-                .id(entity.getId())
-                .username(entity.getUsername())
-                .email(entity.getEmail())
-                .createdAt(entity.getCreatedAt())
-                .build();
-    }
 }

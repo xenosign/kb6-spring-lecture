@@ -95,27 +95,27 @@ public class IndexTestController {
         return ResponseEntity.ok(result);
     }
 
-    // 나이트메어 테스트 데이터 생성
-    // GET, http://localhost:8080/index-test/nightmare/generate-data
-    @GetMapping("/nightmare/generate-data")
-    public ResponseEntity<String> generateNightmareData(@RequestParam(defaultValue = DATA_COUNTS) int count) {
-        long excutionTime = nightmareService.generateTestData(100000);
-
-        String message = "나이트메어 샘플 데이터 저장 완료!, 실행 시간 - " + excutionTime + " ms";
-        return ResponseEntity.ok(message);
-    }
-
-    // 나이트메어 샘플 데이터 저장
-    // GET, http://localhost:8080/index-test/nightmare/test
-    @GetMapping("/nightmare/test")
-    public ResponseEntity<String> insertNightmareSample() {
-        long executionTime = nightmareService.insertSampleData();
-
-        String message = String.format(
-                "나이트메어 샘플 데이터 저장 완료! 실행시간: %dms",
-                executionTime
-        );
-
-        return ResponseEntity.ok(message);
-    }
+//    // 나이트메어 테스트 데이터 생성
+//    // GET, http://localhost:8080/index-test/nightmare/generate-data
+//    @GetMapping("/nightmare/generate-data")
+//    public ResponseEntity<String> generateNightmareData(@RequestParam(defaultValue = DATA_COUNTS) int count) {
+//        long excutionTime = nightmareService.generateTestData(100000);
+//
+//        String message = "나이트메어 샘플 데이터 저장 완료!, 실행 시간 - " + excutionTime + " ms";
+//        return ResponseEntity.ok(message);
+//    }
+//
+//    // 나이트메어 샘플 데이터 저장
+//    // GET, http://localhost:8080/index-test/nightmare/test
+//    @GetMapping("/nightmare/test")
+//    public ResponseEntity<String> insertNightmareSample() {
+//        long executionTime = nightmareService.insertSampleData();
+//
+//        String message = String.format(
+//                "나이트메어 샘플 데이터 저장 완료! 실행시간: %dms",
+//                executionTime
+//        );
+//
+//        return ResponseEntity.ok(message);
+//    }
 }
