@@ -59,6 +59,12 @@ public class JpaConfig {
         properties.setProperty("hibernate.hbm2ddl.auto", "create");
         properties.setProperty("hibernate.show_sql", "false");
         properties.setProperty("hibernate.format_sql", "false");
+
+        // 동시성 테스트를 위한 추가 설정
+        properties.setProperty("hibernate.connection.isolation", "2"); // READ_COMMITTED
+        properties.setProperty("hibernate.jdbc.batch_size", "20");
+        properties.setProperty("hibernate.order_inserts", "true");
+        properties.setProperty("hibernate.order_updates", "true");
         return properties;
     }
 }
