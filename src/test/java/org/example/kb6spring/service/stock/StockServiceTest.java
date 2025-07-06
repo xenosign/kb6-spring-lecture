@@ -1,7 +1,7 @@
 package org.example.kb6spring.service.stock;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.kb6spring.config.RootConfig;
+import org.example.kb6spring.config.TestConfig;
 import org.example.kb6spring.domain.stock.Stock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = RootConfig.class)
+@ContextConfiguration(classes = TestConfig.class)
 @TestPropertySource("classpath:application.properties")
 @Slf4j
 class StockServiceTest {
