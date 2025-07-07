@@ -3,9 +3,11 @@ package org.example.kb6spring.repository.stock;
 import org.example.kb6spring.domain.stock.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
 import java.util.Optional;
@@ -36,6 +38,12 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     @Query("SELECT s FROM Stock s WHERE s.id = :id")
     Optional<Stock> findByIdWithOptimisticForceIncrement(@Param("id") Long id);
+
+    @Modifying
+    @Query("UPDATE Stock s SET s.quantity = s.quantity - :quantity " +
+            "WHERE s.id = :stockId AND s.quantity >= :quantity")
+    int decreaseStockAtomic(@Param("stockId") Long stockId,
+                            @Param("quantity") Integer quantity);
 
     // 상품명으로 조회
     Optional<Stock> findByProductName(String productName);

@@ -29,25 +29,25 @@
     </logger>
     <!-- Root Logger -->
 
-    <logger name="org.mybatis">
-        <level value="DEBUG" />
-    </logger>
-    <logger name="org.apache.ibatis">
-        <level value="DEBUG" />
-    </logger>
+<!--    <logger name="org.mybatis">-->
+<!--        <level value="DEBUG" />-->
+<!--    </logger>-->
+<!--    <logger name="org.apache.ibatis">-->
+<!--        <level value="DEBUG" />-->
+<!--    </logger>-->
 
     <!-- Hibernate SQL Logger -->
-    <logger name="org.hibernate.SQL">
+<!--    <logger name="org.hibernate.SQL">-->
 <!--        <level value="DEBUG" />-->
-        <level value="OFF" />
-        <appender-ref ref="console" />
-    </logger>
+<!--        <level value="OFF" />-->
+<!--        <appender-ref ref="console" />-->
+<!--    </logger>-->
 
     <!-- Hibernate Parameter Binding Logger -->
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder">
-        <level value="OFF" />
-        <appender-ref ref="console" />
-    </logger>
+<!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder">-->
+<!--        <level value="OFF" />-->
+<!--        <appender-ref ref="console" />-->
+<!--    </logger>-->
 
     <root>
         <priority value="info" />
