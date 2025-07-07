@@ -45,6 +45,15 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     int decreaseStockAtomic(@Param("stockId") Long stockId,
                             @Param("quantity") Integer quantity);
 
+    @Modifying
+    @Query("UPDATE Stock s SET s.quantity = :quantity, s.updatedAt = CURRENT_TIMESTAMP WHERE s.id = :id")
+    int updateStockQuantityAtomic(@Param("id") Long id, @Param("quantity") Integer quantity);
+
+    @Modifying
+    @Query("UPDATE Stock s SET s.quantity = s.quantity - :amount, s.updatedAt = CURRENT_TIMESTAMP " +
+            "WHERE s.id = :id AND s.quantity >= :amount")
+    int decreaseStockByAmount(@Param("id") Long id, @Param("amount") Integer amount);
+
     // 상품명으로 조회
     Optional<Stock> findByProductName(String productName);
 }
