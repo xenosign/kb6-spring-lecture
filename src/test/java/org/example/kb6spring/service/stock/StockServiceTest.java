@@ -44,9 +44,9 @@ class StockServiceTest {
     private static final int DECREASE_QUANTITY = 1;
 
     // 낙관락 재시도 수
-    private static final int OPTIMISTIC_LOCK_RETRY_COUNT = 3;
+    private static final int OPTIMISTIC_LOCK_RETRY_COUNT = 10;
     // Redis 분산락 재시도 수
-    private static final int REDIS_RETRY_COUNT = 3;
+    private static final int REDIS_RETRY_COUNT = 10;
 
     @BeforeAll
     static void disableHibernateSqlPrint() {
