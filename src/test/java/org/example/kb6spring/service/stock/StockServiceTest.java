@@ -36,6 +36,7 @@ class StockServiceTest {
     private RedisTemplate<String, String> redisTemplate; // Redis 직접 제어용
 
     private Stock testStock;
+
     // 쓰레드 수
     private static final int THREAD_COUNT = 10;
     // 초기 재고 수
@@ -345,7 +346,7 @@ class StockServiceTest {
 
     @Test
     @Order(6)
-    @DisplayName("6. 낙관적 락(재시도 X) - 대용량 100개 쓰레드")
+    @DisplayName("6. 낙관적 락(재시도 O) - 대용량 100개 쓰레드")
     void testHighVolumeConcurrencyWithOptimisticLockAndRetry() throws InterruptedException {
         // Given
         int highThreadCount = 100;

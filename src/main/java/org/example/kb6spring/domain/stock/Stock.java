@@ -16,9 +16,11 @@ public class Stock {
     private Long id;
     private String productName;
     private Integer quantity;
+    private java.time.LocalDateTime updatedAt;
+
     @Version
     private Long version;
-    private java.time.LocalDateTime updatedAt;
+
     @PreUpdate
     public void preUpdate() {
         this.updatedAt = java.time.LocalDateTime.now();
