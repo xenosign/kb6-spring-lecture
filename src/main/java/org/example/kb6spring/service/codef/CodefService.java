@@ -1,44 +1,41 @@
 package org.example.kb6spring.service.codef;
 
+
+import io.codef.api.EasyCodef;
+import io.codef.api.EasyCodefServiceType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class CodefService {
+    @Autowired
+    private EasyCodef easyCodef;
 
+    public String getAccountInfo(String connectedId, String organization, String accountNumber) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("connectedId", connectedId);
+        params.put("organization", organization);
+        params.put("accountNumber", accountNumber);
 
-    // RSA
-    public static String encryptRSA(String plainText, String base64PublicKey)
-            throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
-            InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        try {
+            return easyCodef.requestProduct(
+                    "/v1/account/account-info",
+                    EasyCodefServiceType.DEMO,  // 혹은 EasyCodefServiceType.API(운영)
+                    params
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("CODEF API 호출 실패: " + e.getMessage(), e);
+        }
+    }
 
-        byte[] bytePublicKey = Base64.getDecoder().decode(base64PublicKey);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PublicKey publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(bytePublicKey));
-
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-        byte[] bytePlain = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(bytePlain);
+    public String createConnectedId(Map<String, Object> requestBody) {
+        try {
+            return easyCodef.createAccount(EasyCodefServiceType.DEMO, requestBody);
+        } catch (Exception e) {
+            throw new RuntimeException("CODEF API connectedId 생성 실패: " + e.getMessage(), e);
+        }
     }
 }

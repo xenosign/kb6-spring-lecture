@@ -20,7 +20,8 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
                 RootConfig.class,
                 RedisConfig.class,
                 JpaConfig.class,
-                SecurityConfig.class
+                SecurityConfig.class,
+                CodefConfig.class
         };
     }
 
