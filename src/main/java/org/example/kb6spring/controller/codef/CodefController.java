@@ -42,7 +42,7 @@ public class CodefController {
 
     @PostMapping("/create-connected-id")
     @ResponseBody
-    public String createConnectedId(@RequestBody Map<String, Object> requestBody) {
+    public String createConnectedId(@RequestBody HashMap<String, Object> requestBody) {
         return codefService.createConnectedId(requestBody);
     }
 }

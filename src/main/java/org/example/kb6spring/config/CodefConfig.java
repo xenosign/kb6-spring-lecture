@@ -10,8 +10,6 @@ public class CodefConfig {
     private static final String CODEF_CLIENT_SECRET = "";
     private static final String CODEF_PUBLIC_KEY = "";
 
-
-
     @Bean
     public EasyCodef easyCodef() {
         EasyCodef codef = new EasyCodef();

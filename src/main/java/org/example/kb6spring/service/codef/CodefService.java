@@ -31,7 +31,7 @@ public class CodefService {
         }
     }
 
-    public String createConnectedId(Map<String, Object> requestBody) {
+    public String createConnectedId(HashMap<String, Object> requestBody) {
         try {
             return easyCodef.createAccount(EasyCodefServiceType.DEMO, requestBody);
         } catch (Exception e) {
