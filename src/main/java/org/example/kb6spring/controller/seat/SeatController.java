@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = "Todo 컨트롤러")
+@Api(tags = "Seat 컨트롤러")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
