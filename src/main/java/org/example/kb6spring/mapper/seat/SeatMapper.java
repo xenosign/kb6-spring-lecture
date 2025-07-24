@@ -33,4 +33,8 @@ public interface SeatMapper {
     // 좌석 삭제
     @Delete("DELETE FROM seats WHERE seat_id = #{seatId}")
     int deleteSeat(Long seatId);
+
+    // 좌석 전체 삭제
+    @Delete("DELETE FROM seats")
+    int deleteAllSeat();
 }
