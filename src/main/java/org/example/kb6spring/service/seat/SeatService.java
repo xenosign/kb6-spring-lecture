@@ -11,7 +11,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SeatService {
-
     private final SeatMapper seatMapper;
 
     public void createSeats() {
