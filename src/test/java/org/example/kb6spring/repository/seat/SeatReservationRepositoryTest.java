@@ -2,6 +2,7 @@ package org.example.kb6spring.repository.seat;
 
 import org.example.kb6spring.config.JpaConfig;
 import org.example.kb6spring.config.RootConfig;
+import org.example.kb6spring.config.TestConfig;
 import org.example.kb6spring.domain.seat.SeatReservationVo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { RootConfig.class})
+@ContextConfiguration(classes = { RootConfig.class, TestConfig.class })
 public class SeatReservationRepositoryTest {
 
     @Autowired
@@ -25,7 +26,7 @@ public class SeatReservationRepositoryTest {
     public void insertReservation() {
         SeatReservationVo reservation = new SeatReservationVo();
         reservation.setSeatId(1L);
-        reservation.setUserId("1234");
+        reservation.setUserId(100L);
         reservation.setStatus("RESERVED");
 
         int result = reservationRepository.insertReservation(reservation);

@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class SeatReservationVo {
     private Long reservationId;
     private Long seatId;
-    private String userId;
+    private Long userId;
     private Timestamp reservationTime;
     private String status;
     private Timestamp updatedAt;
