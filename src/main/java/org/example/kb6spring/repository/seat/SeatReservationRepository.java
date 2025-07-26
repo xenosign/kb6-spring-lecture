@@ -14,32 +14,32 @@ import java.util.List;
 public class SeatReservationRepository {
     private final SeatReservationMapper seatReservationMapper;
 
-    List<SeatReservationVo> findAllReservations() {
+    public List<SeatReservationVo> findAllReservations() {
         return seatReservationMapper.findAllReservations();
     };
 
     // 특정 좌석 예약 조회
-    SeatReservationVo findBySeatId(Long seatId) {
+    public SeatReservationVo findBySeatId(Long seatId) {
         return seatReservationMapper.findBySeatId(seatId);
     };
 
     // 특정 사용자 예약 전체 조회
-    List<SeatReservationVo> findByUserId(Long userId) {
+    public List<SeatReservationVo> findByUserId(Long userId) {
         return seatReservationMapper.findByUserId(userId);
     };
 
     // 예약 생성
-    int insertReservation(SeatReservationVo reservation) {
+    public int insertReservation(SeatReservationVo reservation) {
         return seatReservationMapper.insertReservation(reservation);
     };
 
     // 예약 상태 수정 (예: 취소로 변경)
-    int updateReservationStatus(SeatReservationVo reservation) {
+    public int updateReservationStatus(SeatReservationVo reservation) {
         return seatReservationMapper.updateReservationStatus(reservation);
     };
 
     // 예약 삭제
-    int deleteReservation(Long reservationId) {
+    public int deleteReservation(Long reservationId) {
         return seatReservationMapper.deleteReservation(reservationId);
     };
 }
