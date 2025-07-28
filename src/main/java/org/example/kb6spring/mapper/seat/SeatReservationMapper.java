@@ -27,7 +27,7 @@ public interface SeatReservationMapper {
 
     // 예약 상태 수정 (예: 취소로 변경)
     @Update("UPDATE reservations SET status = #{status} " +
-            "WHERE reservation_id = #{reservationId}")
+            "WHERE seat_id = #{seatId}")
     int updateReservationStatus(SeatReservationVo reservation);
 
     // 예약 삭제

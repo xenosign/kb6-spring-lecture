@@ -104,6 +104,10 @@ dependencies {
     // CODEF
     // implementation 'io.codef.api:easycodef-java-v2:2.0.0-beta-005'
     implementation 'io.codef.api:easycodef-java:1.0.6'
+
+    // WebSocket
+    implementation 'org.springframework:spring-websocket:5.3.30'
+    implementation 'org.springframework:spring-messaging:5.3.30'
 }
 
 test {

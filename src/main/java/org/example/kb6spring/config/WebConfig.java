@@ -21,7 +21,8 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
                 RedisConfig.class,
                 JpaConfig.class,
                 SecurityConfig.class,
-                CodefConfig.class
+                CodefConfig.class,
+                WebSocketConfig.class
         };
     }
 

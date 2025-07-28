@@ -1,6 +1,7 @@
 package org.example.kb6spring.repository.seat;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.*;
 import org.example.kb6spring.domain.seat.SeatReservationVo;
 import org.example.kb6spring.mapper.seat.SeatReservationMapper;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class SeatReservationRepository {
