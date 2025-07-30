@@ -29,12 +29,9 @@ public class SeatReservationController {
 
     @PostMapping("/reserve")
     public ResponseEntity<SeatReservationVo> makeReservation(@RequestBody SeatReservationVo reservation) {
-        log.info("@@@@@@@@@@@@@ {}", reservation);
 
         seatReservationService.confirmReservation(reservation);
-
         messagingTemplate.convertAndSend("/topic/seats/update", reservation);
-
         return ResponseEntity.ok(reservation);
     }
 

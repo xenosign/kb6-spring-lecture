@@ -66,7 +66,6 @@ public class SeatReservationService {
         SeatReservationVo existing = findBySeatId(reservation.getSeatId());
 
         if ("PENDING".equals(existing.getStatus())) {
-            log.info("##################### {}", reservation);
             reservation.setStatus("RESERVED");
             return seatReservationRepository.updateReservationStatus(reservation);
         } else {
