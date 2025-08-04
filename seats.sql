@@ -13,9 +13,29 @@ CREATE TABLE reservations (
                               seat_id BIGINT NOT NULL,
                               user_id BIGINT NOT NULL,
                               reserved_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                              status ENUM('RESERVED', 'CANCELLED') DEFAULT 'RESERVED',
+                              status ENUM('RESERVED', 'PENDING', 'CANCELLED', 'AVAILABLE') DEFAULT 'AVAILABLE',
                               updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                               UNIQUE KEY uq_seat_reservation (seat_id),
                               INDEX idx_user (user_id),
                               FOREIGN KEY (seat_id) REFERENCES seats(seat_id)
 );
+
+SELECT
+    s.seat_id,
+    s.section,
+    s.seat_row,
+    s.seat_number,
+    s.created_at,
+    s.updated_at,
+    r.reservation_id,
+    r.user_id,
+    r.status AS status,
+    r.reserved_at
+FROM
+    seats s
+        LEFT JOIN
+    reservations r
+    ON
+        s.seat_id = r.seat_id
+ORDER BY
+    s.section, s.seat_row, s.seat_number;
