@@ -108,6 +108,9 @@ dependencies {
     // WebSocket
     implementation 'org.springframework:spring-websocket:5.3.30'
     implementation 'org.springframework:spring-messaging:5.3.30'
+
+    // JSON
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 
 test {
